@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: fastapi-container
+    command: uvicorn src.main:app --host 0.0.0.0 --port 80 --reload
+    ports:
+      - 80:80
+    volumes:
+      - .:/code
+    depends_on:
+      - redis_db
+
+  redis_db:
+    container_name: redis_db
+    command: bash -c "redis-server --appendonly yes --requirepass <password>"
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis-volume:/data
